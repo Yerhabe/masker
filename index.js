@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function() {
+module.exports = () => {
 	let _fields = [];
 	let _maxDepth = 5;
 
@@ -45,4 +45,4 @@ module.exports = function() {
 			}(objOut, 0);
 		}
 	};
-}();
+};
