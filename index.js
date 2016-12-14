@@ -19,7 +19,13 @@ module.exports = () => {
 		},
 
 		mask(objIn) {
-			let objOut = JSON.parse(JSON.stringify(objIn));
+			let objOut;
+
+			try {
+				objOut = JSON.parse(JSON.stringify(objIn));
+			} catch (e) {
+				objOut = Object.assign(objIn);
+			}
 
 			return function _mask(objOut, depth) {
 				depth = depth + 1;
