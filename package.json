@@ -1,0 +1,22 @@
+{
+  "name": "masker",
+  "version": "1.0.0",
+  "description": "Recursively mask object fields by name",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yerhabe/masker.git"
+  },
+  "keywords": [
+    "mask"
+  ],
+  "author": "Yerhabe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yerhabe/masker/issues"
+  },
+  "homepage": "https://github.com/Yerhabe/masker#readme"
+}
