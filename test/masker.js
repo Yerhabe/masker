@@ -59,6 +59,44 @@ describe('mask', function () {
 		maskedData.should.not.have.deep.property('highestThree.arrTwo');
 		maskedData.should.not.have.deep.property('highestThree.arrThree.arrThreeChild');
 	});
+
+	it('should mask the given dotted fields', function () {
+		let testData = {
+			a: 'parentA',
+			b: {
+				a: 'childA'
+			}
+		};
+
+		let maskedData = masker()
+			.fields('b.a')
+			.mask(testData)
+
+		maskedData.should.have.property('a');
+		maskedData.should.not.have.deep.property('b.a');
+	});
+
+	it('should mask all except the given dotted fields', function () {
+		let testData = {
+			a: 'parentA',
+			b: {
+				a: 'childA'
+			},
+			c: null,
+			d: {
+				a: undefined
+			}
+		};
+
+		let maskedData = masker()
+			.allExcept('b', 'b.a')
+			.mask(testData)
+
+		maskedData.should.not.have.property('a');
+		maskedData.should.not.have.property('c');
+		maskedData.should.not.have.property('d');
+		maskedData.should.have.deep.property('b.a');
+	});
 });
 
 describe('maxDepth', function () {

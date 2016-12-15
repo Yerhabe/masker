@@ -49,9 +49,10 @@ module.exports = function () {
 					objOut = Object.assign(objIn);
 				}
 
-				let shouldDelete = field => _fields.length > 0 ? _fields.includes(field) : !_except.includes(field);
+				let shouldDelete = path => _fields.length > 0 ? includes(_fields, path) : !includes(_except, path);
+				let includes = (arr, path) => arr.includes(path) || arr.includes([...path.split('.')].pop());
 
-				return function _mask(objOut, depth) {
+				return function _mask(objOut, path, depth) {
 					if (
 						objOut === undefined ||
 						objOut === null ||
@@ -64,15 +65,17 @@ module.exports = function () {
 					depth = depth + 1;
 
 					for (let field of Object.keys(objOut)) {
-						if (shouldDelete(field)) {
+						let _path = path ? `${path}.${field}` : field;
+
+						if (shouldDelete(_path)) {
 							delete objOut[field];
 						} else if (typeof objOut[field] === 'object') {
-							_mask(objOut[field], depth);
+							_mask(objOut[field], _path, depth);
 						}
 					}
 
 					return objOut;
-				}(objOut, 0);
+				}(objOut, undefined, 0);
 			}
 		};
 	}();
