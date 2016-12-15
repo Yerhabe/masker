@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function() {
-	return function() {
+module.exports = function () {
+	return function () {
 		let _fields = [];
 		let _except = [];
 		let _maxDepth = 5;
@@ -33,7 +33,11 @@ module.exports = function() {
 			},
 
 			mask(objIn) {
-				if (_fields.length === 0 && _except.length === 0) {
+				if (
+					(_fields.length === 0 && _except.length === 0) ||
+					objIn == undefined ||
+					objIn == null
+				) {
 					return objIn;
 				}
 
@@ -48,10 +52,16 @@ module.exports = function() {
 				let shouldDelete = field => _fields.length > 0 ? _fields.includes(field) : !_except.includes(field);
 
 				return function _mask(objOut, depth) {
-					depth = depth + 1;
-					if (typeof objOut !== 'object' || depth > _maxDepth) {
+					if (
+						objOut === undefined ||
+						objOut === null ||
+						typeof objOut !== 'object' ||
+						depth > _maxDepth
+					) {
 						return objOut;
 					}
+
+					depth = depth + 1;
 
 					for (let field of Object.keys(objOut)) {
 						if (shouldDelete(field)) {
