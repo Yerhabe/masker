@@ -9,16 +9,16 @@ module.exports = function() {
 		return {
 			only(...args) {
 				if (_except.length > 0) {
-					throw new Error('Cannot set "only" when "except" is set');
+					throw new Error('Cannot set "only" when "allExcept" is set');
 				}
 
 				_only = _only.concat(args);
 				return this;
 			},
 
-			except(...args) {
+			allExcept(...args) {
 				if (_only.length > 0) {
-					throw new Error('Cannot set "except" when "only" is set');
+					throw new Error('Cannot set "allExcept" when "only" is set');
 				}
 
 				_except = _except.concat(args);
