@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function() {
-	return function() {
+module.exports = function () {
+	return function () {
 		let _fields = [];
 		let _maxDepth = 5;
 
@@ -29,7 +29,12 @@ module.exports = function() {
 
 				return function _mask(objOut, depth) {
 					depth = depth + 1;
-					if (typeof objOut !== 'object' || depth > _maxDepth) {
+					if (
+						objOut === undefined ||
+						objOut === null ||
+						typeof objOut !== 'object' ||
+						depth > _maxDepth
+					) {
 						return objOut;
 					}
 
