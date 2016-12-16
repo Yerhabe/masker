@@ -44,29 +44,40 @@ module.exports = function () {
 				let shouldDelete = path => _fields.length > 0 ? includes(_fields, path) : !includes(_except, path);
 				let includes = (arr, path) => arr.includes(path) || arr.includes([...path.split('.')].pop());
 
-				return function _mask(objOut, path, depth) {
+				function _mask(objOut, path, depth) {
 					if (
 						objOut === undefined ||
 						objOut === null ||
 						typeof objOut !== 'object' ||
 						depth > _maxDepth
 					) {
-						return objOut;
+						return {
+							returnedObj: objOut,
+							shouldDelete: path ? shouldDelete(path) : false
+						};
 					}
 
 					depth = depth + 1;
 					let cloned = new objOut.constructor();
 
 					for (let field of Object.keys(objOut)) {
+						let returnedObj;
+						let shouldDelete = true;
 						let _path = path ? `${path}.${field}` : field;
 
-						if (objOut.hasOwnProperty(field) && !shouldDelete(_path)) {
-							cloned[field] = _mask(objOut[field], _path, depth);
+						if (objOut.hasOwnProperty(field)) {
+							({ returnedObj, shouldDelete } = _mask(objOut[field], _path, depth));
+						}
+
+						if (!shouldDelete) {
+							cloned[field] = returnedObj;
 						}
 					}
 
 					return cloned;
-				}(objIn, undefined, 0);
+				}
+
+				return _mask(objIn, undefined, 0);
 			}
 		};
 	}();
