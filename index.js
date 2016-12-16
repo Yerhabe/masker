@@ -41,14 +41,6 @@ module.exports = function () {
 					return objIn;
 				}
 
-				let objOut;
-
-				try {
-					objOut = JSON.parse(JSON.stringify(objIn));
-				} catch (e) {
-					objOut = Object.assign(objIn);
-				}
-
 				let shouldDelete = path => _fields.length > 0 ? includes(_fields, path) : !includes(_except, path);
 				let includes = (arr, path) => arr.includes(path) || arr.includes([...path.split('.')].pop());
 
@@ -63,19 +55,18 @@ module.exports = function () {
 					}
 
 					depth = depth + 1;
+					let cloned = new objOut.constructor();
 
 					for (let field of Object.keys(objOut)) {
 						let _path = path ? `${path}.${field}` : field;
 
-						if (shouldDelete(_path)) {
-							delete objOut[field];
-						} else if (typeof objOut[field] === 'object') {
-							_mask(objOut[field], _path, depth);
+						if (objOut.hasOwnProperty(field) && !shouldDelete(_path)) {
+							cloned[field] = _mask(objOut[field], _path, depth);
 						}
 					}
 
-					return objOut;
-				}(objOut, undefined, 0);
+					return cloned;
+				}(objIn, undefined, 0);
 			}
 		};
 	}();

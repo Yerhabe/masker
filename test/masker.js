@@ -47,6 +47,18 @@ describe('mask', function () {
 		maskedData.should.not.have.deep.property('highestFive.middleFive.lowestFive');
 	});
 
+	it('should mask the given fields without affecting the passed in object', function () {
+		let maskedData = masker()
+			.fields('highestOne', 'lowestFive')
+			.mask(testData)
+
+		maskedData.should.not.have.property('highestOne');
+		maskedData.should.not.have.deep.property('highestFive.middleFive.lowestFive');
+
+		testData.should.have.property('highestOne');
+		testData.should.have.deep.property('highestFive.middleFive.lowestFive');
+	});
+
 	it('should mask all except the give fields', function () {
 		let maskedData = masker()
 			.allExcept('highestOne', 'middleOne', 'highestThree', 'arrThree')
