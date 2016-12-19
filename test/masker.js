@@ -59,31 +59,6 @@ describe('mask', function () {
 		testData.should.have.deep.property('highestFive.middleFive.lowestFive');
 	});
 
-	it('should not blow up when given an object with a circular reference', function () {
-		let testData = {};
-		testData.a = 'A';
-		testData.b = testData;
-
-		// Prove that it's a circular reference
-		expect(() => JSON.stringify(testData)).to.throw('Converting circular structure to JSON');
-
-		let maskedData;
-		let e;
-
-		try {
-			maskedData = masker()
-				.fields('a')
-				.mask(testData)
-		} catch (_e) {
-			e = _e;
-		}
-
-		expect(e).to.be.undefined;
-
-		maskedData.should.not.have.property('a');
-		maskedData.should.have.deep.property('b.b');
-	});
-
 	it('should mask all except the give fields', function () {
 		let maskedData = masker()
 			.allExcept('highestOne', 'middleOne', 'highestThree', 'arrThree')
