@@ -62,14 +62,14 @@ module.exports = function () {
 
 					for (let field of Object.keys(objOut)) {
 						let returnedObj;
-						let shouldDelete = true;
+						let _shouldDelete = true;
 						let _path = path ? `${path}.${field}` : field;
 
-						if (objOut.hasOwnProperty(field)) {
-							({ returnedObj, shouldDelete } = _mask(objOut[field], _path, depth));
+						if (objOut.hasOwnProperty(field) && !shouldDelete(_path)) {
+							({ returnedObj, _shouldDelete } = _mask(objOut[field], _path, depth));
 						}
 
-						if (!shouldDelete) {
+						if (!_shouldDelete) {
 							cloned[field] = returnedObj;
 						}
 					}
